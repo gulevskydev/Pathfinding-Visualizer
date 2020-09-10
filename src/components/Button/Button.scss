@@ -1,0 +1,32 @@
+$bg: #3c3c3c;
+$white: #fff;
+$black: #202121;
+
+button {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+  vertical-align: middle;
+  text-decoration: none;
+  font-size: inherit;
+  font-family: inherit;
+
+  &.learn-more {
+    font-weight: 900;
+    color: $black;
+    padding: 1.25rem 2rem;
+
+    background: $white;
+    text-transform: uppercase;
+    &:hover {
+      background: rgb(255, 64, 129);
+      transition: 400ms;
+    }
+    &:active {
+      background: rgb(90, 120, 255);
+      transition: 400ms;
+    }
+  }
+}

@@ -1,0 +1,47 @@
+.unvisited-node {
+  width: 1.2rem;
+  height: 1.2rem;
+  background: white;
+  margin-left: 2rem;
+  margin-right: 0.5rem;
+  border: 1px solid skyblue;
+}
+.visited-node {
+  width: 1.2rem;
+  height: 1.2rem;
+  background: blueviolet;
+  margin-left: 2rem;
+  margin-right: 0.5rem;
+}
+.wall-node {
+  width: 1.2rem;
+  height: 1.2rem;
+  background: #0d3f54;
+  margin-left: 2rem;
+  margin-right: 0.5rem;
+}
+.search-node {
+  width: 1.2rem;
+  height: 1.2rem;
+  background: greenyellow;
+  margin-left: 2rem;
+  margin-right: 0.5rem;
+}
+
+.start-node {
+  width: 1.2rem;
+  height: 1.2rem;
+  background: url(../../img/pin.svg);
+  background-size: contain;
+  margin-left: 2rem;
+  margin-right: 0.5rem;
+}
+
+.target-node {
+  width: 1.2rem;
+  height: 1.2rem;
+  background: url(../../img/target.svg);
+  background-size: contain;
+  margin-left: 2rem;
+  margin-right: 0.5rem;
+}
