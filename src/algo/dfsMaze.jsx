@@ -1,17 +1,15 @@
 const unvisited = [];
-const visited = [];
+let visited = [];
 export default function dfsMazeGeneration(grid, start) {
-  console.log(grid);
-  //   const visited = [];
   const row = start[0];
   const col = start[1];
-  dfsMazeAlgo(grid, row, col);
-  console.log(visited);
+  dfsMazeAlgo(grid, row + 1, col + 1);
   return visited;
 }
 
 function dfsMazeAlgo(grid, row, col) {
   let cell = grid[row][col];
+
   visited.push(cell);
   let newRandomArray = generateNewArray();
 

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Diijkstra from "../../algo/Diijkstra";
 import dfsMazeGeneration from "../../algo/dfsMaze";
+import dfs from "../../algo/dfsAlgo";
+import bfs from "../../algo/bfsAlgo";
 import "./Grid.scss";
 
 export default function Grid({
@@ -24,7 +26,7 @@ export default function Grid({
     let gridArray = [];
     for (let i = 0; i < 20; i++) {
       let row = [];
-      for (let j = 0; j < 45; j++) {
+      for (let j = 0; j < 55; j++) {
         let cell = {
           row: i,
           col: j,
@@ -194,7 +196,61 @@ export default function Grid({
   }
 
   function maze() {
-    dfsMazeGeneration(grid, startCoords);
+    setGrid(createGrid());
+
+    // const mazeArray = dfsMazeGeneration(grid, startCoords);
+    // const mazeArray = dfs(
+    //   grid,
+    //   grid[startCoords[0]][startCoords[1]],
+    //   grid[targetCoords[0]][targetCoords[1]]
+    // );
+    const arr = bfs(grid, startCoords, targetCoords);
+    const mazeArray = arr[0];
+    const path = arr[1];
+    const updatedGrid = grid.slice();
+    for (let i = 0; i < mazeArray.length; i++) {
+      const id = `${mazeArray[i].row}-${mazeArray[i].col}`;
+      const currentCell = document.querySelector(`[data-col='${id}']`);
+
+      setTimeout(() => {
+        currentCell.classList.add("neighbor");
+      }, i * 5);
+    }
+    setTimeout(() => {
+      for (let i = 0; i < path.length; i++) {
+        const id = `${path[i].row}-${path[i].col}`;
+        const currentCell = document.querySelector(`[data-col='${id}']`);
+
+        setTimeout(() => {
+          currentCell.classList.remove("neighbor");
+          currentCell.classList.add("path");
+        }, i * 10);
+      }
+    }, mazeArray.length * 8);
+
+    // Maze
+    // for (let i = 0; i < updatedGrid.length; i++) {
+    //   for (let j = 0; j < updatedGrid[i].length; j++) {
+    //     const currentCell = updatedGrid[i][j];
+    //     const id = `${currentCell.row}-${currentCell.col}`;
+    //     const currentCellAnimation = document.querySelector(
+    //       `[data-col='${id}']`
+    //     );
+    //     if (
+    //       mazeArray.includes(currentCell) &&
+    //       !currentCell.start &&
+    //       !currentCell.end
+    //     ) {
+    //       setTimeout(() => {
+    //         currentCell.wall = true;
+    //         currentCellAnimation.classList.add("wall");
+    //       }, j * 500);
+    //     }
+    //   }
+    // }
+    setTimeout(() => {
+      setGrid(updatedGrid);
+    }, 500 * updatedGrid[0].length);
   }
   return (
     <>
