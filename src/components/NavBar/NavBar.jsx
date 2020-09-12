@@ -5,17 +5,17 @@ import Description from "../Description/Description";
 
 import "./NavBar.scss";
 export default function NavBar({
-  setActiveAlgo,
   setResetAlgo,
   setVisualizeAlgo,
   isFinishedAlgo,
   isClearGrid,
+  setSelectedOption,
 }) {
   return (
     <>
       <div className="container-nav">
-        <h1>Pathfinding Visualizer</h1>
-        <Dropdown setActiveAlgo={setActiveAlgo} />
+        <h1 className="header">Pathfinding Visualizer</h1>
+        <Dropdown setSelectedOption={setSelectedOption} />
         <Button
           title="RESET"
           setResetAlgo={setResetAlgo}

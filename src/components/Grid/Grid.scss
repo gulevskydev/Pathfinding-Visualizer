@@ -1,11 +1,20 @@
 .row {
   display: flex;
   pointer-events: "none";
+  border-collapse: collapse;
 }
 
+td,
+th {
+  padding: 0;
+}
 .col {
   border: 1px solid skyblue;
-  padding: 1rem;
+  padding: 11.5px;
+  outline: none;
+  display: inline-block;
+  border-spacing: 0;
+  border-collapse: collapse;
 }
 
 .main-container {
@@ -13,7 +22,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 5rem;
+  margin-top: 2%;
+  margin-bottom: 5%;
 }
 
 .neighbor {
@@ -26,6 +36,7 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
+  border-collapse: collapse;
 }
 
 @keyframes wallAnimation {
@@ -88,11 +99,10 @@
 
 .wall {
   background: #0d3f54;
+  border: 1px solid #0d3f54;
 }
 
 .path {
-  background-color: greenyellow;
-  // border-style: none;
   animation-name: pathAnimation;
   animation-duration: 750ms;
   animation-timing-function: ease-in-out;
@@ -101,6 +111,7 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
+  border: 1px solid cyan;
 }
 
 @keyframes pathAnimation {

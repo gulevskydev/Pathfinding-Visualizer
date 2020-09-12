@@ -1,6 +1,6 @@
-const unvisited = [];
 let visited = [];
-export default function dfsMazeGeneration(grid, start) {
+export default function mazeGeneration(grid, start) {
+  console.log(grid, start);
   const row = start[0];
   const col = start[1];
   dfsMazeAlgo(grid, row + 1, col + 1);
@@ -15,7 +15,6 @@ function dfsMazeAlgo(grid, row, col) {
 
   for (let i = 0; i < newRandomArray.length; i++) {
     switch (newRandomArray[i]) {
-      //Top
       case 0:
         if (row - 2 < 0) {
           continue;

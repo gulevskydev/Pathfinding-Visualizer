@@ -1,8 +1,23 @@
 import React, { useState, useEffect } from "react";
-import Diijkstra from "../../algo/Diijkstra";
-import dfsMazeGeneration from "../../algo/dfsMaze";
-import dfs from "../../algo/dfsAlgo";
-import bfs from "../../algo/bfsAlgo";
+
+// algorigthms
+import {
+  DiijkstraAlgo,
+  dfsAlgo,
+  bfsAlgo,
+  mazeGeneration,
+  astarAlgo,
+} from "../../algo/index";
+
+// animations algorithms
+import {
+  diijkstraAnimation,
+  generateMaze,
+  bfsAnimatation,
+  dfsAnimatation,
+  astarAnimation,
+} from "../../algoAnimations/algoAnimation";
+
 import "./Grid.scss";
 
 export default function Grid({
@@ -10,7 +25,7 @@ export default function Grid({
   setResetAlgo,
   visualizeAlgo,
   setVisualizeAlgo,
-  isFinishedAlgo,
+  selectedOption,
   setFinishedAlgo,
   setIsClearGrid,
 }) {
@@ -21,12 +36,29 @@ export default function Grid({
   const [isMovingStartCoords, setMovingStartCoord] = useState(false);
   const [isStartOrTargetCoords, setIsStartOrTargetCoords] = useState(null);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
+  const [isAlgoPrev, setIsAlgoPrev] = useState(false);
 
+  useEffect(() => {
+    resetArr();
+  }, [resetAlgo]);
+
+  useEffect(() => {
+    changedAlgo();
+  }, [selectedOption]);
+
+  useEffect(() => {
+    if (visualizeAlgo) {
+      setIsClearGrid(false);
+      algoVisualize();
+    }
+  }, [visualizeAlgo]);
+
+  // creating main grid
   function createGrid() {
     let gridArray = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 30; i++) {
       let row = [];
-      for (let j = 0; j < 55; j++) {
+      for (let j = 0; j < 60; j++) {
         let cell = {
           row: i,
           col: j,
@@ -47,11 +79,11 @@ export default function Grid({
     e.preventDefault();
     if (!isAnimationFinished) {
       setIsMouseDown(true);
-      const currentCellClass = e.target.className;
-      if (currentCellClass.includes("start")) {
+      const currentnodeClass = e.target.className;
+      if (currentnodeClass.includes("start")) {
         setMovingStartCoord(true);
         setIsStartOrTargetCoords("start");
-      } else if (currentCellClass.includes("end")) {
+      } else if (currentnodeClass.includes("end")) {
         setMovingStartCoord(true);
         setIsStartOrTargetCoords("end");
       } else {
@@ -63,9 +95,8 @@ export default function Grid({
 
   const handleMouseEnter = (e, row, col) => {
     if (!isAnimationFinished) {
-      const currentCellClass = e.target.className;
-      if (isMovingStartCoords && !currentCellClass.includes("wall")) {
-        console.log("END ", currentCellClass);
+      const currentnodeClass = e.target.className;
+      if (isMovingStartCoords && !currentnodeClass.includes("wall")) {
         const option = isStartOrTargetCoords;
         const optionCoords =
           isStartOrTargetCoords === "end" ? targetCoords : startCoords;
@@ -89,8 +120,8 @@ export default function Grid({
       }
       if (
         isMouseDown &&
-        !currentCellClass.includes("start") &&
-        !currentCellClass.includes("end") &&
+        !currentnodeClass.includes("start") &&
+        !currentnodeClass.includes("end") &&
         !isMovingStartCoords
       ) {
         const updatedGrid = changeWallState(grid, row, col);
@@ -109,65 +140,119 @@ export default function Grid({
     setMovingStartCoord(false);
   };
 
-  const cellClass = (start, end, wall) => {
-    return start ? "col start" : end ? "col end" : wall ? "col wall" : "col";
-  };
+  function algoVisualize() {
+    if (selectedOption === "Dijkstra's algorithm") {
+      if (isAlgoPrev) {
+        setGrid(resetPrevVisitedNodes(false));
+      }
+      diijkstraAnimation(
+        grid,
+        startCoords,
+        targetCoords,
+        setFinishedAlgo,
+        setVisualizeAlgo,
+        setIsAnimationFinished,
+        DiijkstraAlgo
+      );
+      setIsAlgoPrev(true);
+    } else if (selectedOption === "Breadth-first search") {
+      if (isAlgoPrev) {
+        setGrid(resetPrevVisitedNodes(false));
+      }
+      bfsAnimatation(
+        grid,
+        startCoords,
+        targetCoords,
+        setIsAnimationFinished,
+        setFinishedAlgo,
+        bfsAlgo,
+        setGrid,
+        setVisualizeAlgo
+      );
+      setIsAlgoPrev(true);
+    } else if (selectedOption === "Depth-first search") {
+      if (isAlgoPrev) {
+        setGrid(resetPrevVisitedNodes(false));
+      }
+      dfsAnimatation(
+        grid,
+        startCoords,
+        targetCoords,
+        setIsAnimationFinished,
+        setFinishedAlgo,
+        dfsAlgo,
+        setGrid,
+        setVisualizeAlgo
+      );
+      setIsAlgoPrev(true);
+    } else if (selectedOption === "A* search algorithm") {
+      if (isAlgoPrev) {
+        setGrid(resetPrevVisitedNodes(false));
+      }
+      astarAnimation(
+        grid,
+        startCoords,
+        targetCoords,
+        setIsAnimationFinished,
+        setFinishedAlgo,
+        astarAlgo,
+        setGrid,
+        setVisualizeAlgo
+      );
+      setIsAlgoPrev(true);
+    } else if (selectedOption === "Generate maze") {
+      resetPrevVisitedNodes(true);
+      setResetAlgo(false);
+      setIsAnimationFinished(false);
+      setFinishedAlgo(true);
+      setIsClearGrid(true);
+      setIsAlgoPrev(false);
+      generateMaze(
+        grid,
+        startCoords,
+        targetCoords,
+        mazeGeneration,
+        setIsAnimationFinished,
+        setFinishedAlgo,
+        setGrid,
+        setVisualizeAlgo
+      );
+    }
+  }
 
-  function algoStart() {
-    setIsAnimationFinished(true);
-    setFinishedAlgo(false);
-
-    const start = grid[startCoords[0]][startCoords[1]];
-    const target = grid[targetCoords[0]][targetCoords[1]];
-    const allAnimations = Diijkstra(grid, start, target);
-    const animationsSearch = allAnimations[0];
-    const animationPath = allAnimations[1];
-
-    for (let i = 1; i < animationsSearch.length; i++) {
-      if (animationsSearch[i][2] === "neighborAnimation") {
-        const row = animationsSearch[i][0];
-        const col = animationsSearch[i][1];
-        const id = `${row}-${col}`;
-        const cell = document.querySelector(`[data-col='${id}']`);
-        if (!cell.className.includes("wall")) {
-          setTimeout(() => {
-            cell.classList.add("neighbor");
-          }, i * 8);
-        }
+  function resetPrevVisitedNodes(isWall) {
+    const visited = document.querySelectorAll(".neighbor");
+    const path = document.querySelectorAll(".path");
+    visited.forEach((el) => el.classList.remove("neighbor"));
+    path.forEach((el) => el.classList.remove("path"));
+    const updateGrid = grid.slice();
+    for (let i = 0; i < updateGrid.length; i++) {
+      for (let j = 0; j < updateGrid[0].length; j++) {
+        const currentCell = grid[i][j];
+        const updatedCurrentCell = {
+          row: i,
+          col: j,
+          start: i == startCoords[0] && j == startCoords[1],
+          end: i == targetCoords[0] && j == targetCoords[1],
+          visited: false,
+          distance: Infinity,
+          wall: isWall ? false : currentCell.wall,
+        };
+        updateGrid[i][j] = updatedCurrentCell;
       }
     }
-    if (allAnimations[1].length > 0) {
-      setTimeout(() => {
-        for (let i = 0; i < animationPath.length; i++) {
-          // do function here
-          setTimeout(() => {
-            const { row, col } = animationPath[i];
-            const id = `${row}-${col}`;
-            const pathCell = document.querySelector(`[data-col='${id}']`);
-            pathCell.classList.remove("neighbor");
-            pathCell.classList.add("path");
-          }, i * 50);
-        }
-      }, animationsSearch.length * 10);
-    }
-
-    setTimeout(() => {
-      alert("Finished");
-      setVisualizeAlgo(false);
-      setFinishedAlgo(true);
-    }, animationPath.length * 50 + animationsSearch.length * 10 + 100);
+    return updateGrid;
   }
-  useEffect(() => {
-    resetArr();
-  }, [resetAlgo]);
-  useEffect(() => {
-    if (visualizeAlgo) {
-      setIsClearGrid(false);
-      algoStart();
-    }
-  }, [visualizeAlgo]);
+
+  function changedAlgo() {
+    setResetAlgo(false);
+    setIsAnimationFinished(false);
+    setFinishedAlgo(true);
+    setIsClearGrid(true);
+  }
+
   function resetArr() {
-    setGrid(createGrid);
+    setGrid(createGrid());
     setFinishedAlgo(true);
     setIsClearGrid(true);
     const cells = document.querySelectorAll(".col");
@@ -184,6 +269,7 @@ export default function Grid({
     setIsAnimationFinished(false);
   }
 
+  // when drawing walls - rerender grid
   function changeWallState(grid, row, col) {
     const updatedGrid = grid.slice();
     const currentCell = grid[row][col];
@@ -195,92 +281,37 @@ export default function Grid({
     return updatedGrid;
   }
 
-  function maze() {
-    setGrid(createGrid());
+  const nodeClass = (start, end, wall) => {
+    return start ? "col start" : end ? "col end" : wall ? "col wall" : "col";
+  };
 
-    // const mazeArray = dfsMazeGeneration(grid, startCoords);
-    // const mazeArray = dfs(
-    //   grid,
-    //   grid[startCoords[0]][startCoords[1]],
-    //   grid[targetCoords[0]][targetCoords[1]]
-    // );
-    const arr = bfs(grid, startCoords, targetCoords);
-    const mazeArray = arr[0];
-    const path = arr[1];
-    const updatedGrid = grid.slice();
-    for (let i = 0; i < mazeArray.length; i++) {
-      const id = `${mazeArray[i].row}-${mazeArray[i].col}`;
-      const currentCell = document.querySelector(`[data-col='${id}']`);
-
-      setTimeout(() => {
-        currentCell.classList.add("neighbor");
-      }, i * 5);
-    }
-    setTimeout(() => {
-      for (let i = 0; i < path.length; i++) {
-        const id = `${path[i].row}-${path[i].col}`;
-        const currentCell = document.querySelector(`[data-col='${id}']`);
-
-        setTimeout(() => {
-          currentCell.classList.remove("neighbor");
-          currentCell.classList.add("path");
-        }, i * 10);
-      }
-    }, mazeArray.length * 8);
-
-    // Maze
-    // for (let i = 0; i < updatedGrid.length; i++) {
-    //   for (let j = 0; j < updatedGrid[i].length; j++) {
-    //     const currentCell = updatedGrid[i][j];
-    //     const id = `${currentCell.row}-${currentCell.col}`;
-    //     const currentCellAnimation = document.querySelector(
-    //       `[data-col='${id}']`
-    //     );
-    //     if (
-    //       mazeArray.includes(currentCell) &&
-    //       !currentCell.start &&
-    //       !currentCell.end
-    //     ) {
-    //       setTimeout(() => {
-    //         currentCell.wall = true;
-    //         currentCellAnimation.classList.add("wall");
-    //       }, j * 500);
-    //     }
-    //   }
-    // }
-    setTimeout(() => {
-      setGrid(updatedGrid);
-    }, 500 * updatedGrid[0].length);
-  }
   return (
     <>
       <div className="main-container">
-        <button onClick={maze}>Algo</button>
-        {/* <button onClick={resetArr}>Reset</button> */}
-        <div
+        <table
           className="grid-container"
           onMouseLeave={(e) => handleMouseLeave(e)}>
           {grid.map((row, i) => {
             return (
-              <div key={i} className="row">
+              <tr key={i} className="row">
                 {row.map((cell, i) => {
                   return (
-                    <div
+                    <td
                       data-col={`${cell.row}-${cell.col}`}
-                      className={cellClass(cell.start, cell.end, cell.wall)}
+                      className={nodeClass(cell.start, cell.end, cell.wall)}
                       onMouseEnter={(e) =>
                         handleMouseEnter(e, cell.row, cell.col)
                       }
                       onMouseDown={(e) =>
                         handleMouseDown(e, cell.row, cell.col)
                       }
-                      onMouseUp={(e) => handleMouseUp(e)}></div>
+                      onMouseUp={(e) => handleMouseUp(e)}></td>
                   );
                 })}
-              </div>
+              </tr>
             );
           })}
-        </div>
+        </table>
       </div>
     </>
   );

@@ -4,29 +4,29 @@ import Grid from "../Grid/Grid";
 import NavBar from "../NavBar/NavBar";
 
 function App() {
-  const [activeAlgo, setActiveAlgo] = useState("Diijkstra");
   const [resetAlgo, setResetAlgo] = useState(false);
   const [visualizeAlgo, setVisualizeAlgo] = useState(false);
   const [isFinishedAlgo, setFinishedAlgo] = useState(true);
   const [isClearGrid, setIsClearGrid] = useState(true);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   return (
     <>
       <NavBar
-        setActiveAlgo={setActiveAlgo}
         setResetAlgo={setResetAlgo}
         setVisualizeAlgo={setVisualizeAlgo}
         isFinishedAlgo={isFinishedAlgo}
         isClearGrid={isClearGrid}
+        setSelectedOption={setSelectedOption}
       />
       <Grid
-        activeAlgo={activeAlgo}
         resetAlgo={resetAlgo}
         setResetAlgo={setResetAlgo}
         visualizeAlgo={visualizeAlgo}
         setVisualizeAlgo={setVisualizeAlgo}
         setFinishedAlgo={setFinishedAlgo}
         isFinishedAlgo={isFinishedAlgo}
+        selectedOption={selectedOption}
         setIsClearGrid={setIsClearGrid}
       />
     </>

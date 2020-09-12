@@ -1,12 +1,19 @@
 .container-nav {
   display: flex;
+  margin: 0 5%;
   align-items: center;
+  justify-content: center;
 }
 
 .description-container {
   display: flex;
-  justify-content: left;
-  align-items: center;
+  justify-content: center;
 
-  margin-top: 3%;
+  align-items: center;
+  margin: 0 5%;
+  margin-top: 1%;
+}
+
+.header {
+  font-size: 2rem;
 }
