@@ -1,16 +1,17 @@
-const unvisitedNodes = [];
-const visitedNodes = [];
-
 export default function bfs(grid, start, target) {
-  unvisitedNodes.push(grid[start[0]][start[1]]);
+  const unvisitedNodes = [];
+  const visitedNodes = [];
+  const startNode = grid[start[0]][start[1]];
+  const targetNode = grid[target[0]][target[1]];
+  unvisitedNodes.push(startNode);
 
   while (unvisitedNodes.length) {
     const currentNodeCopy = unvisitedNodes.shift();
     currentNodeCopy.visited = true;
-    visitedNodes.push(currentNodeCopy);
+    visitedNodes.push(currentNodeCopy, startNode);
 
     if (currentNodeCopy.end) {
-      const path = getShourtestPath(currentNodeCopy);
+      const path = getShourtestPath(currentNodeCopy, targetNode);
       return [visitedNodes, path];
     }
 
@@ -36,8 +37,9 @@ function getNeighbors(node, grid) {
   return neighbors.filter((n) => !n.visited && !n.wall);
 }
 
-function getShourtestPath(cell) {
+function getShourtestPath(cell, targetNode) {
   const result = [];
+  result.push(targetNode);
   while (cell.previosNode) {
     result.push(cell.previosNode);
     cell = cell.previosNode;

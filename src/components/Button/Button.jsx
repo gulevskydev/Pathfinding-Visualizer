@@ -6,7 +6,7 @@ function Button(prop) {
       if (prop.title === "RESET") {
         prop.setResetAlgo(true);
       } else {
-        if (prop.isClearGrid) {
+        if (prop.isClearGrid && prop.selectedOption) {
           prop.setVisualizeAlgo(true);
         }
       }

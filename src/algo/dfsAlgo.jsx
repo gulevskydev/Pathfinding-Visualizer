@@ -1,6 +1,6 @@
 export default function dfs(grid, currentNode, finishNode) {
-  const { allVisited } = depthFirstReq(grid, currentNode, finishNode);
-  return allVisited;
+  const { allVisited, found } = depthFirstReq(grid, currentNode, finishNode);
+  return [allVisited, found];
 }
 const visited = [];
 const depthFirstReq = (grid, currentNode, finishNode, allVisited = []) => {
@@ -14,10 +14,7 @@ const depthFirstReq = (grid, currentNode, finishNode, allVisited = []) => {
   }
   const neighbors = getUnvisitedNonWallNeighbors(currentNode, grid);
   for (let i = 0; i < neighbors.length; i++) {
-    console.log(currentNode, "NODE");
-
     const neighbor = neighbors[i];
-    console.log(neighbor, "NEIGHBOR");
     neighbor.visited = true;
     visited.push(currentNode);
 

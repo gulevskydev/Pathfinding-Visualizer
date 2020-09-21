@@ -20,7 +20,7 @@ export function diijkstraAnimation(
   const animationsSearch = allAnimations[0];
   const animationPath = allAnimations[1];
 
-  for (let i = 1; i < animationsSearch.length; i++) {
+  for (let i = 0; i < animationsSearch.length; i++) {
     if (animationsSearch[i][2] === "neighborAnimation") {
       const row = animationsSearch[i][0];
       const col = animationsSearch[i][1];
@@ -65,12 +65,12 @@ export function generateMaze(
   setIsAnimationFinished,
   setFinishedAlgo,
   setGrid,
-  setVisualizeAlgo
+  setVisualizeAlgo,
+  setResetAlgo
 ) {
   setIsAnimationFinished(true);
   setFinishedAlgo(false);
 
-  const start = grid[startCoords[0]][startCoords[1]];
   const mazeArray = mazeGeneration(grid, startCoords);
   const updatedGrid = grid.slice();
 
@@ -99,7 +99,7 @@ export function generateMaze(
 }
 
 /*
- ***  bfs/dfs/astar algorithms animation ***
+ ***  bfs     ***
  */
 
 export function bfsAnimatation(
@@ -116,33 +116,49 @@ export function bfsAnimatation(
   setFinishedAlgo(false);
 
   const arr = algo(grid, startCoords, targetCoords);
-  const mazeArray = arr[0];
+  let mazeArray = arr[0];
   const path = arr[1];
+
+  if (!Array.isArray(mazeArray)) {
+    mazeArray = arr.slice();
+  }
+
   const updatedGrid = grid.slice();
   for (let i = 0; i < mazeArray.length; i++) {
     const id = `${mazeArray[i].row}-${mazeArray[i].col}`;
     const currentCell = document.querySelector(`[data-col='${id}']`);
 
     setTimeout(() => {
-      currentCell.classList.add("neighbor");
+      if (!currentCell.className.includes("wall")) {
+        currentCell.classList.add("neighbor");
+      }
     }, i * 5);
   }
-  setTimeout(() => {
-    for (let i = 0; i < path.length; i++) {
-      const id = `${path[i].row}-${path[i].col}`;
-      const currentCell = document.querySelector(`[data-col='${id}']`);
 
-      setTimeout(() => {
-        currentCell.classList.remove("neighbor");
-        currentCell.classList.add("path");
-      }, i * 10);
-    }
-  }, mazeArray.length * 8);
-  setTimeout(() => {
-    setGrid(updatedGrid);
-    setVisualizeAlgo(false);
-    setFinishedAlgo(true);
-  }, path.length * 10 + mazeArray.length * 19);
+  if (!Array.isArray(mazeArray)) {
+    setTimeout(() => {
+      setGrid(updatedGrid);
+      setVisualizeAlgo(false);
+      setFinishedAlgo(true);
+    }, mazeArray.length * 19);
+  } else {
+    setTimeout(() => {
+      for (let i = 0; i < path.length; i++) {
+        const id = `${path[i].row}-${path[i].col}`;
+        const currentCell = document.querySelector(`[data-col='${id}']`);
+
+        setTimeout(() => {
+          currentCell.classList.remove("neighbor");
+          currentCell.classList.add("path");
+        }, i * 5);
+      }
+    }, mazeArray.length * 6);
+    setTimeout(() => {
+      setGrid(updatedGrid);
+      setVisualizeAlgo(false);
+      setFinishedAlgo(true);
+    }, path.length * 8 + mazeArray.length * 5);
+  }
 }
 
 /*
@@ -161,11 +177,14 @@ export function dfsAnimatation(
   setIsAnimationFinished(true);
   setFinishedAlgo(false);
 
-  const arr = dfs(
+  const result = dfs(
     grid,
     grid[startCoords[0]][startCoords[1]],
     grid[targetCoords[0]][targetCoords[1]]
   );
+
+  const arr = result[0];
+  const foundTarget = result[1];
 
   const updatedGrid = grid.slice();
   for (let i = 0; i < arr.length; i++) {
@@ -176,17 +195,19 @@ export function dfsAnimatation(
       currentCell.classList.add("neighbor");
     }, i * 5);
   }
-  setTimeout(() => {
-    for (let i = 0; i < arr.length; i++) {
-      const id = `${arr[i].row}-${arr[i].col}`;
-      const currentCell = document.querySelector(`[data-col='${id}']`);
+  if (foundTarget) {
+    setTimeout(() => {
+      for (let i = 0; i < arr.length; i++) {
+        const id = `${arr[i].row}-${arr[i].col}`;
+        const currentCell = document.querySelector(`[data-col='${id}']`);
 
-      setTimeout(() => {
-        currentCell.classList.remove("neighbor");
-        currentCell.classList.add("path");
-      }, i * 10);
-    }
-  }, arr.length * 8);
+        setTimeout(() => {
+          currentCell.classList.remove("neighbor");
+          currentCell.classList.add("path");
+        }, i * 10);
+      }
+    }, arr.length * 8);
+  }
   setTimeout(() => {
     setGrid(updatedGrid);
     setVisualizeAlgo(false);
@@ -216,9 +237,11 @@ export function astarAnimation(
     grid[targetCoords[0]][targetCoords[1]]
   );
 
-  const mazeArray = arr[0];
+  let mazeArray = arr[0];
   const path = arr[1];
-  console.log(arr);
+  if (!Array.isArray(mazeArray)) {
+    mazeArray = arr;
+  }
   const updatedGrid = grid.slice();
   for (let i = 0; i < mazeArray.length; i++) {
     const id = `${mazeArray[i].row}-${mazeArray[i].col}`;
@@ -228,6 +251,7 @@ export function astarAnimation(
       currentCell.classList.add("neighbor");
     }, i * 5);
   }
+
   setTimeout(() => {
     for (let i = 0; i < path.length; i++) {
       const id = `${path[i].row}-${path[i].col}`;

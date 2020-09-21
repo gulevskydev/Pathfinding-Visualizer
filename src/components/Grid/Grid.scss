@@ -80,13 +80,13 @@ th {
   }
   100% {
     transform: scale(1);
-    background-color: blueviolet;
+    background-color: #8a07ff;
     border-radius: 0%;
   }
 }
 
 .start {
-  background-image: url(../../img/pin.svg);
+  background: url(../../img/pin.svg);
   background-size: contain;
   cursor: pointer;
   animation-name: coordsAnimation;
@@ -95,6 +95,7 @@ th {
 .end {
   background: url(../../img/target.svg);
   background-size: contain;
+  cursor: pointer;
 }
 
 .wall {
@@ -111,7 +112,7 @@ th {
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
-  border: 1px solid cyan;
+  border: 1px solid #41eaff;
 }
 
 @keyframes pathAnimation {
@@ -133,6 +134,6 @@ th {
   }
   100% {
     transform: scale(1);
-    background-color: cyan;
+    background-color: #41eaff;
   }
 }

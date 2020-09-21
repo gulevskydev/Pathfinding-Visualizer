@@ -201,22 +201,25 @@ export default function Grid({
       );
       setIsAlgoPrev(true);
     } else if (selectedOption === "Generate maze") {
+      setResetAlgo(true);
       resetPrevVisitedNodes(true);
-      setResetAlgo(false);
       setIsAnimationFinished(false);
       setFinishedAlgo(true);
       setIsClearGrid(true);
       setIsAlgoPrev(false);
-      generateMaze(
-        grid,
-        startCoords,
-        targetCoords,
-        mazeGeneration,
-        setIsAnimationFinished,
-        setFinishedAlgo,
-        setGrid,
-        setVisualizeAlgo
-      );
+      setTimeout(() => {
+        generateMaze(
+          grid,
+          startCoords,
+          targetCoords,
+          mazeGeneration,
+          setIsAnimationFinished,
+          setFinishedAlgo,
+          setGrid,
+          setVisualizeAlgo,
+          setResetAlgo
+        );
+      }, 0);
     }
   }
 

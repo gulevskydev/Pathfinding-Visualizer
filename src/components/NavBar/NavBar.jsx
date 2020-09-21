@@ -10,6 +10,7 @@ export default function NavBar({
   isFinishedAlgo,
   isClearGrid,
   setSelectedOption,
+  selectedOption,
 }) {
   return (
     <>
@@ -26,6 +27,7 @@ export default function NavBar({
           setVisualizeAlgo={setVisualizeAlgo}
           isFinishedAlgo={isFinishedAlgo}
           isClearGrid={isClearGrid}
+          selectedOption={selectedOption}
         />
       </div>
       <div className="description-container">

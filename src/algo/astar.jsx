@@ -24,8 +24,7 @@ export default function astarAlgo(grid, start, target) {
     minNode.visited = true;
     close.push(minNode);
     if (minNode.end) {
-      const path = getShourtestPath(minNode);
-      console.log(close);
+      const path = getShourtestPath(minNode, target);
       return [close, path];
     }
 
@@ -47,6 +46,7 @@ export default function astarAlgo(grid, start, target) {
     }
     open.sort((a, b) => a.distanceTotal - b.distanceTotal);
   }
+  return close;
 }
 
 function getNeighbors(node, grid) {
@@ -59,8 +59,9 @@ function getNeighbors(node, grid) {
   return neighbors.filter((n) => !n.visited && !n.wall);
 }
 
-function getShourtestPath(cell) {
+function getShourtestPath(cell, target) {
   const result = [];
+  result.push(target);
   while (cell.previosNode) {
     result.push(cell.previosNode);
     cell = cell.previosNode;

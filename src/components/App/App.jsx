@@ -18,6 +18,7 @@ function App() {
         isFinishedAlgo={isFinishedAlgo}
         isClearGrid={isClearGrid}
         setSelectedOption={setSelectedOption}
+        selectedOption={selectedOption}
       />
       <Grid
         resetAlgo={resetAlgo}

@@ -1,6 +1,5 @@
 let visited = [];
 export default function mazeGeneration(grid, start) {
-  console.log(grid, start);
   const row = start[0];
   const col = start[1];
   dfsMazeAlgo(grid, row + 1, col + 1);
