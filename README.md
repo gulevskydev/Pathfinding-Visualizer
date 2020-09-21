@@ -2,7 +2,7 @@
 
 ## [Watch it live](https://gulevskydev-pathfinding-visualizer.netlify.app/)
 
-![Pathfinding visualizer](./logo-git.jpg)
+![Pathfinding visualizer](./git-logo.jpg)
 
 ### Installing:
 
@@ -15,7 +15,7 @@ npm run start
 
 This will start a live-server with the project running.
 
-### Deployment
+### Deployment:
 
 To deploy simply run
 
